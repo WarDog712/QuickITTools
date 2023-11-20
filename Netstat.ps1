@@ -7,21 +7,8 @@ $output = Invoke-Expression $command
 
 # Invia il messaggio su Discord
 $payload = @{
-  content = $message
-  embeds = @(
-    {
-      title = "Risultato del comando"
-      fields = @(
-        {
-          name = "Comando"
-          value = $command
-        },
-        {
-          name = "Output"
-          value = $output
-        }
-      )
-    }
+  'username' = 'Jarvis'
+  'content' = $output
   )
 }
-Invoke-RestMethod -Method POST -Uri $webhook -Body $payload
+Invoke-RestMethod -ContentType 'Application/Json' -Method POST -Uri $webhook -Body ($payload | ConvertTo-Json)
