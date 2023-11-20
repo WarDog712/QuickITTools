@@ -1,21 +1,17 @@
-# Set the variables
+# Imposta le variabili
 $command = "netstat"
-$message = "Result of the command: $command"
+$message = "Risultato del comando: $command"
+$fileName = "netstat.txt"
 
-# Execute the command
+# Esegue il comando
 $output = Invoke-Expression $command
 
-# Convert the output to a string
-$content = $output | Out-String
+# Salva il risultato in un file txt
+$output | Out-File $fileName
 
-# Create the JSON payload
-$payload = @{
+# Invia il file tramite Discord
+Invoke-RestMethod -ContentType 'application/json' -Method POST -Uri $webhook -Body @{
     'username' = 'Jarvis'
-    'content' = $content
+    'content' = "File allegato: $fileName"
+    'file' = $fileName
 }
-
-# Convert the payload to a JSON string
-$payloadString = $payload | ConvertTo-Json
-
-# Send the message to Discord
-Invoke-RestMethod -ContentType 'application/json' -Method POST -Uri $webhook -Body $payloadString
