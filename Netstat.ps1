@@ -1,5 +1,7 @@
 # Imposta il percorso del file in cui salvare l'output di netstat
-$filePath = Join-Path $PSScriptRoot "netstat_output.txt"
+$scriptPath = $MyInvocation.MyCommand.Path
+$scriptDirectory = Split-Path $scriptPath
+$filePath = Join-Path $scriptDirectory "netstat_output.txt"
 
 # Esegue il comando netstat e salva l'output nel file specificato
 netstat > $filePath
