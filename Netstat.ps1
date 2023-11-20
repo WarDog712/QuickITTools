@@ -1,17 +1,21 @@
-# Imposta le variabili
+# Set the variables
 $command = "netstat"
-$message = "Risultato del comando: $command"
-# Esegue il comando
+$message = "Result of the command: $command"
+
+# Execute the command
 $output = Invoke-Expression $command
 
-# Converte il valore del campo content in una stringa
+# Convert the output to a string
 $content = $output | Out-String
 
-# Crea il payload JSON
+# Create the JSON payload
 $payload = @{
-  'username' = 'Jarvis'
-  'content' = $content
+    'username' = 'Jarvis'
+    'content' = $content
 }
 
-# Invia il messaggio su Discord
-Invoke-RestMethod -ContentType 'application/json' -Method POST -Uri $webhook -Body $payload
+# Convert the payload to a JSON string
+$payloadString = $payload | ConvertTo-Json
+
+# Send the message to Discord
+Invoke-RestMethod -ContentType 'application/json' -Method POST -Uri $webhook -Body $payloadString
