@@ -10,7 +10,6 @@ $message = "Output di netstat:"
 $data = @{
     name = "Jarvis"
     content = $message
-    }
 } | ConvertTo-Json
 
 # Invia il messaggio Discord tramite Invoke-RestMethod
